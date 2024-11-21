@@ -120,5 +120,12 @@
     fallbackDns = [ "2606:4700:4700::1112" "2606:4700:4700::1002" "1.1.1.2" "1.0.0.2" ];
   };
 
+  system.autoUpgrade = {
+    enable = true;
+    allowReboot = true;
+    # Daily 00:00
+    dates = "daily UTC";
+  };
+
   system.stateVersion = "24.05";
 }
