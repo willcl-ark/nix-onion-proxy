@@ -127,5 +127,18 @@
     dates = "daily UTC";
   };
 
+  ## Garbage collector
+  nix.gc = {
+    automatic = true;
+    # Every Monday 01:00 (UTC)
+    dates = "Monday 01:00 UTC";
+    options = "--delete-older-than 7d";
+  };
+
+  # Run garbage collection whenever there is less than 500MB free space left
+  nix.extraOptions = ''
+    min-free = ${toString (500 * 1024 * 1024)}
+  '';
+
   system.stateVersion = "24.05";
 }
