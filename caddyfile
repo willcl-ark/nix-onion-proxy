@@ -1,0 +1,36 @@
+{
+	debug
+	log {
+		output stdout
+		format console
+		level INFO
+	}
+}
+
+http://sccne54olmrogrg5q2kkmkueqodv5h4xivph23qfoazrstl6ooxsd3ad.onion:8080 {
+	bind ::1
+
+	header {
+		-strict-transport-security
+		defer
+	}
+
+	reverse_proxy https://bitcoincore.org {
+		header_up Host {http.reverse_proxy.upstream.host}
+
+		@redirect status 301 302
+		handle_response @redirect {
+			rewrite * {rp.header.Location}
+			reverse_proxy https://bitcoincore.org {
+				header_up Host {http.reverse_proxy.upstream.host}
+				transport http {
+					tls_insecure_skip_verify
+				}
+			}
+		}
+
+		transport http {
+			tls_insecure_skip_verify
+		}
+	}
+}

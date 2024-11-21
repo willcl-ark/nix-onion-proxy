@@ -9,7 +9,9 @@
     (modulesPath + "/installer/scan/not-detected.nix")
     (modulesPath + "/profiles/qemu-guest.nix")
     ./disk-config.nix
+    ./caddytor.nix
   ];
+
   boot.loader.grub = {
     # no need to set devices, disko will add all devices that have a EF02 partition to the list already
     # devices = [ ];
@@ -38,12 +40,6 @@
         isNormalUser = true;
         extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
       };
-      caddyProxy = {
-        home = "/var/lib/caddyProxy";
-        createHome = true;
-        isSystemUser = true;
-        group = "caddyProxy";
-      };
       caddyTor = {
         home = "/var/lib/caddyTor";
         createHome = true;
@@ -53,9 +49,6 @@
     };
 
     groups = {
-      caddyProxy = {
-        members = [ "caddyProxy" ];
-      };
       caddyTor = {
         members = [ "caddyTor" ];
       };
@@ -159,6 +152,39 @@
     "net.core.default_qdisc" = "cake";
   };
 
+  ## Tor onion
+  services.tor = {
+    enable = true;
+    enableGeoIP = false;
+    relay.onionServices = {
+      bitcoinCoreOrg = {
+        version = 3;
+        map = [{
+          port = 80;
+          target = {
+            addr = "[::1]";
+            port = 8080;
+          };
+        }];
+      };
+    };
+    settings = {
+      ClientUseIPv4 = true;
+      ClientUseIPv6 = true;
+      ClientPreferIPv6ORPort = true;
+    };
+  };
+
+  services.caddyTor = {
+    enable = true;
+    configFile = ./caddyfile;
+  };
+
+  services.snowflake-proxy = {
+    enable = true;
+    capacity = 100;
+  };
+
   system.autoUpgrade = {
     enable = true;
     allowReboot = true;
@@ -166,18 +192,20 @@
     dates = "daily UTC";
   };
 
-  ## Garbage collector
-  nix.gc = {
-    automatic = true;
-    # Every Monday 01:00 (UTC)
-    dates = "Monday 01:00 UTC";
-    options = "--delete-older-than 7d";
-  };
+  nix = {
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 30d";
+    };
+    extraOptions = ''
+      min-free = ${toString (500 * 1024 * 1024)}
+    '';
 
-  # Run garbage collection whenever there is less than 500MB free space left
-  nix.extraOptions = ''
-    min-free = ${toString (500 * 1024 * 1024)}
-  '';
+    settings = {
+      experimental-features = [ "nix-command" "flakes" ];
+    };
+  };
 
   system.stateVersion = "24.05";
 }
