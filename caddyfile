@@ -1,5 +1,5 @@
 {
-	debug
+	# debug
 	log {
 		output stdout
 		format console
@@ -7,7 +7,7 @@
 	}
 }
 
-http://sccne54olmrogrg5q2kkmkueqodv5h4xivph23qfoazrstl6ooxsd3ad.onion:8080 {
+:8080 {
 	bind ::1
 
 	header {

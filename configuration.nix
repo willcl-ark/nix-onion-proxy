@@ -154,6 +154,7 @@
 
   ## Tor onion
   services.tor = {
+    client.enable = true;
     enable = true;
     enableGeoIP = false;
     relay.onionServices = {
