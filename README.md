@@ -45,3 +45,7 @@ or:
 ```bash
 nix run nixpkgs#nixos-rebuild -- switch --flake .#hetzner-cloud --target-host <host>
 ```
+
+##### Notes
+
+*caddyTor.nix* inspired by: https://mdleom.com/blog/2020/03/14/caddy-nixos-part-3/ ([archive.today](http://archive.today/cU0RK))
