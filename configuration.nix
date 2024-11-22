@@ -154,6 +154,7 @@
 
   ## Tor onion
   services.tor = {
+    client.enable = true;
     enable = true;
     enableGeoIP = false;
     relay.onionServices = {
@@ -173,6 +174,11 @@
       ClientUseIPv6 = true;
       ClientPreferIPv6ORPort = true;
     };
+  };
+
+  services.privoxy = {
+    enable = true;
+    enableTor = true;
   };
 
   services.caddyTor = {

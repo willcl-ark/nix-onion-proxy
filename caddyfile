@@ -7,7 +7,7 @@
 	}
 }
 
-http://sccne54olmrogrg5q2kkmkueqodv5h4xivph23qfoazrstl6ooxsd3ad.onion:8080 {
+http://bitcoinybownr6vbjvxnhfxlfbvw3kdrhry7w56ds4v3sm37d74zl5id.onion:8080 {
 	bind ::1
 
 	header {
@@ -31,6 +31,8 @@ http://sccne54olmrogrg5q2kkmkueqodv5h4xivph23qfoazrstl6ooxsd3ad.onion:8080 {
 
 		transport http {
 			tls_insecure_skip_verify
+			# Use fast socks port
+			forward_proxy_url socks5://127.0.0.1:9063
 		}
 	}
 }
