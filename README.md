@@ -1,6 +1,9 @@
-# NixOS onion proxy using caddy
+# bitcoincore.org onion proxy using caddy
 
-Proxy from onion to clearnet domain.
+Proxy from a hidden service to bitcoincore.org clearnet site.
+
+- Runs a hidden service which is proxied to bitcoincore.org using Caddy's `reverse_proxy` directive.
+- DNS lookup is handled by `unbound` using DNS-over-TLS and DNSSEC validation.
 
 ## Usage
 
