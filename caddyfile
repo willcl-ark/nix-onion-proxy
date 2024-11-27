@@ -25,12 +25,18 @@
 				header_up Host {http.reverse_proxy.upstream.host}
 				transport http {
 					tls_insecure_skip_verify
+					dial_timeout 10s
+					response_header_timeout 30s
+					read_timeout 30s
 				}
 			}
 		}
 
 		transport http {
 			tls_insecure_skip_verify
+			dial_timeout 10s
+			response_header_timeout 30s
+			read_timeout 30s
 		}
 	}
 }
